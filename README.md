@@ -168,8 +168,7 @@ reportlab>=4.1.0
 
 ## 👥 Tim / Pembuat
 
-Disusun Oleh: [Nama Kamu]
-NIM: [NIM Kamu]
+Disusun Oleh: Rafi Mahesa Adyaksa
 Kelas: TI 23 P CN - SH
 Mata Kuliah: Steganografi & Kriptografi
 Dosen: Vicky Indrawan S.T. M.Sc.
