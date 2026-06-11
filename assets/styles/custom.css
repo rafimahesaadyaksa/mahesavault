@@ -1,0 +1,301 @@
+/* ============================================
+   MahesaVault — 3D Cinematic Vault Theme
+   Inspired by Millanova Chapter: depth, glass, elegance
+   Adapted: Dark Operative + luxury accents
+   ============================================ */
+
+@import url('https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,400;0,600;0,700;1,400&family=JetBrains+Mono:wght@300;400;500;600&family=Inter:wght@300;400;500;600&display=swap');
+
+:root {
+    --bg-deep: #06060a;
+    --bg-primary: #0a0a10;
+    --bg-secondary: #0f1119;
+    --bg-card: rgba(20, 28, 46, 0.72);
+    --bg-glass: rgba(14, 18, 28, 0.55);
+    --accent-cyan: #00f5ff;
+    --accent-pink: #f472b6;
+    --accent-gold: #d4af37;
+    --accent-white: #e8ecf4;
+    --border-glass: rgba(255, 255, 255, 0.08);
+    --shadow-3d: 0 25px 50px -12px rgba(0, 0, 0, 0.65);
+    --perspective: 1200px;
+}
+
+/* ─── Streamlit shell ─── */
+.stApp {
+    background: radial-gradient(ellipse 120% 80% at 50% -20%, rgba(0, 245, 255, 0.06), transparent 50%),
+                radial-gradient(ellipse 80% 60% at 100% 50%, rgba(244, 114, 182, 0.04), transparent 45%),
+                linear-gradient(180deg, var(--bg-deep) 0%, var(--bg-primary) 40%, #0d0d14 100%) !important;
+    color: var(--accent-white);
+}
+
+.main .block-container {
+    padding-top: 1.5rem;
+    max-width: 1280px;
+}
+
+[data-testid="stSidebar"] {
+    background: linear-gradient(180deg, rgba(15, 17, 25, 0.98), rgba(10, 10, 16, 0.98)) !important;
+    border-right: 1px solid var(--border-glass);
+    backdrop-filter: blur(12px);
+}
+
+[data-testid="stSidebar"] [data-testid="stMarkdownContainer"] p,
+[data-testid="stSidebar"] label {
+    color: var(--accent-white) !important;
+}
+
+/* ─── Typography ─── */
+h1, h2, h3 {
+    font-family: 'Cormorant Garamond', 'Georgia', serif !important;
+    font-weight: 600 !important;
+    letter-spacing: 0.02em;
+}
+
+p, li, span, label {
+    font-family: 'Inter', system-ui, sans-serif;
+}
+
+code, pre, .stCode, textarea {
+    font-family: 'JetBrains Mono', monospace !important;
+}
+
+/* ─── 3D Page hero ─── */
+.mv-page-hero {
+    position: relative;
+    text-align: center;
+    padding: 28px 24px 32px;
+    margin-bottom: 24px;
+    border-radius: 20px;
+    background: var(--bg-glass);
+    border: 1px solid var(--border-glass);
+    box-shadow: var(--shadow-3d);
+    backdrop-filter: blur(16px);
+    overflow: hidden;
+}
+
+.mv-page-hero-glow {
+    position: absolute;
+    inset: -40%;
+    background: radial-gradient(circle at 50% 0%, var(--accent, #00f5ff), transparent 55%);
+    opacity: 0.12;
+    pointer-events: none;
+}
+
+.mv-page-eyebrow {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 10px;
+    letter-spacing: 0.35em;
+    color: rgba(226, 232, 240, 0.45);
+    margin-bottom: 10px;
+    position: relative;
+}
+
+.mv-page-title {
+    font-size: 2.2rem !important;
+    margin: 0 !important;
+    background: linear-gradient(135deg, var(--accent-white), var(--accent, #00f5ff));
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    position: relative;
+}
+
+.mv-page-sub {
+    color: rgba(226, 232, 240, 0.55);
+    font-size: 14px;
+    margin-top: 10px;
+    position: relative;
+}
+
+/* ─── Glass message box ─── */
+.mv-glass-box {
+    background: var(--bg-glass);
+    border: 1px solid color-mix(in srgb, var(--accent) 35%, transparent);
+    border-radius: 16px;
+    padding: 22px 24px;
+    margin: 14px 0;
+    box-shadow: 0 8px 32px rgba(0, 0, 0, 0.35);
+    backdrop-filter: blur(12px);
+    transform: translateZ(0);
+}
+
+.mv-glass-label {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 10px;
+    letter-spacing: 0.15em;
+    color: rgba(226, 232, 240, 0.45);
+    margin-bottom: 10px;
+}
+
+.mv-glass-content {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 15px;
+    color: var(--accent);
+    word-break: break-word;
+    white-space: pre-wrap;
+}
+
+/* ─── Operation vault ─── */
+.mv-op-vault {
+    background: var(--bg-glass);
+    border: 1px solid var(--border-glass);
+    border-radius: 12px;
+    padding: 12px 16px;
+}
+
+.mv-op-row {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    padding: 8px 0;
+    border-bottom: 1px solid rgba(255, 255, 255, 0.04);
+    font-size: 12px;
+}
+
+.mv-op-dot {
+    width: 6px;
+    height: 6px;
+    border-radius: 50%;
+    flex-shrink: 0;
+}
+
+.mv-op-mod {
+    font-family: 'JetBrains Mono', monospace;
+    color: var(--accent-cyan);
+    min-width: 110px;
+}
+
+.mv-op-act {
+    color: rgba(226, 232, 240, 0.65);
+}
+
+.mv-launcher-label {
+    text-align: center;
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 11px;
+    letter-spacing: 0.2em;
+    color: rgba(226, 232, 240, 0.4);
+    margin: 16px 0 8px;
+}
+
+/* ─── Metric cards 3D ─── */
+.mv-metric-3d {
+    background: linear-gradient(145deg, rgba(20, 28, 46, 0.9), rgba(10, 14, 24, 0.95));
+    border: 1px solid var(--border-glass);
+    border-radius: 14px;
+    padding: 22px 16px;
+    text-align: center;
+    box-shadow: 0 12px 28px rgba(0, 0, 0, 0.4),
+                inset 0 1px 0 rgba(255, 255, 255, 0.06);
+    transform: perspective(800px) rotateX(2deg);
+    transition: transform 0.35s ease, box-shadow 0.35s ease;
+}
+
+.mv-metric-3d:hover {
+    transform: perspective(800px) rotateX(0deg) translateY(-4px);
+    box-shadow: 0 20px 40px rgba(0, 245, 255, 0.08);
+}
+
+/* ─── Inputs & controls ─── */
+.stTextInput input,
+.stTextArea textarea,
+.stSelectbox > div > div {
+    background: rgba(20, 28, 46, 0.85) !important;
+    border: 1px solid var(--border-glass) !important;
+    color: var(--accent-white) !important;
+    border-radius: 10px !important;
+    transition: border-color 0.3s, box-shadow 0.3s !important;
+}
+
+.stTextInput input:focus,
+.stTextArea textarea:focus {
+    border-color: rgba(0, 245, 255, 0.45) !important;
+    box-shadow: 0 0 0 2px rgba(0, 245, 255, 0.12), 0 8px 24px rgba(0, 0, 0, 0.3) !important;
+}
+
+.stButton > button {
+    background: linear-gradient(135deg, rgba(0, 245, 255, 0.12), rgba(244, 114, 182, 0.12)) !important;
+    border: 1px solid var(--border-glass) !important;
+    color: var(--accent-white) !important;
+    border-radius: 10px !important;
+    font-family: 'JetBrains Mono', monospace !important;
+    font-size: 12px !important;
+    letter-spacing: 0.06em;
+    padding: 0.55rem 1rem !important;
+    transition: all 0.25s ease !important;
+    box-shadow: 0 4px 14px rgba(0, 0, 0, 0.25);
+}
+
+.stButton > button:hover {
+    border-color: rgba(0, 245, 255, 0.5) !important;
+    transform: translateY(-2px);
+    box-shadow: 0 8px 28px rgba(0, 245, 255, 0.15);
+}
+
+.stButton > button[kind="primary"] {
+    background: linear-gradient(135deg, #00f5ff, #0891b2) !important;
+    color: #06060a !important;
+    font-weight: 600 !important;
+    border: none !important;
+}
+
+.stDownloadButton > button {
+    background: rgba(16, 185, 129, 0.12) !important;
+    border: 1px solid rgba(16, 185, 129, 0.35) !important;
+    color: #10b981 !important;
+}
+
+/* ─── Tabs ─── */
+.stTabs [data-baseweb="tab-list"] {
+    gap: 6px;
+    background: transparent;
+    border-bottom: 1px solid var(--border-glass);
+}
+
+.stTabs [data-baseweb="tab"] {
+    background: transparent !important;
+    color: rgba(226, 232, 240, 0.45) !important;
+    font-family: 'JetBrains Mono', monospace !important;
+    font-size: 11px !important;
+    letter-spacing: 0.05em;
+}
+
+.stTabs [aria-selected="true"] {
+    background: rgba(0, 245, 255, 0.08) !important;
+    color: var(--accent-cyan) !important;
+    border-bottom: 2px solid var(--accent-cyan) !important;
+}
+
+[data-testid="stFileUploader"] {
+    background: var(--bg-glass);
+    border: 1px dashed rgba(212, 175, 55, 0.25);
+    border-radius: 14px;
+    padding: 16px;
+    transition: border-color 0.3s, box-shadow 0.3s;
+}
+
+[data-testid="stFileUploader"]:hover {
+    border-color: rgba(0, 245, 255, 0.35);
+    box-shadow: 0 0 30px rgba(0, 245, 255, 0.06);
+}
+
+.streamlit-expanderHeader {
+    background: var(--bg-glass) !important;
+    border-radius: 10px;
+    font-family: 'JetBrains Mono', monospace;
+}
+
+::-webkit-scrollbar { width: 6px; height: 6px; }
+::-webkit-scrollbar-track { background: var(--bg-deep); }
+::-webkit-scrollbar-thumb { background: #2a3348; border-radius: 3px; }
+
+table th {
+    background: rgba(20, 28, 46, 0.9) !important;
+    color: var(--accent-cyan) !important;
+    font-family: 'JetBrains Mono', monospace;
+}
+
+/* Hide Streamlit header/footer for immersive feel */
+[data-testid="stHeader"] {
+    background: transparent;
+}
