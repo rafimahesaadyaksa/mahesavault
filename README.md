@@ -168,20 +168,22 @@ reportlab>=4.1.0
 
 ## 👥 Tim / Pembuat
 
-Disusun Oleh: Rafi Mahesa Adyaksa
-Kelas: TI 23 P CN - SH
-Mata Kuliah: Steganografi & Kriptografi
-Dosen: Vicky Indrawan S.T. M.Sc.
-
+Rafi Mahesa Adyaksa
 ---
 
 ## 📚 Referensi
 
-- Cheddad, A., et al. (2010). *Digital Image Steganography: Survey and Analysis of Current Methods*. Signal Processing.
-- Stallings, W. (2017). *Cryptography and Network Security: Principles and Practice* (7th ed.). Pearson.
-- Dokumentasi OpenCV: https://docs.opencv.org
-- Dokumentasi Streamlit: https://docs.streamlit.io
-- Dokumentasi Python Cryptography: https://cryptography.io/en/latest/
+**Literatur & Jurnal Akademis:**
+* Cheddad, A., et al. (2010). *Digital Image Steganography: Survey and Analysis of Current Methods*. Signal Processing.
+* Cox, I. J., Miller, M. L., Bloom, J. A., Fridrich, J., & Kalker, T. (2007). *Digital Watermarking and Steganography* (2nd ed.). Morgan Kaufmann.
+* Schneier, B. (2015). *Applied Cryptography: Protocols, Algorithms, and Source Code in C* (20th Anniversary Edition). John Wiley & Sons.
+* Stallings, W. (2020). *Cryptography and Network Security: Principles and Practice* (8th ed.). Pearson.
+
+**Dokumentasi Teknologi:**
+* [Python 3.11 Documentation](https://docs.python.org/3/)
+* [Streamlit Documentation](https://docs.streamlit.io/)
+* [OpenCV Documentation](https://docs.opencv.org/)
+* [Python Cryptography Package](https://cryptography.io/en/latest/)
 
 ---
 
