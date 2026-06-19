@@ -189,4 +189,4 @@ Rafi Mahesa Adyaksa
 
 ## 📝 Lisensi
 
-Proyek ini dibuat untuk keperluan akademis UAS semester genap 2024/2025.
+Proyek ini dibuat untuk keperluan akademis UAS semester genap 2026/2027.
