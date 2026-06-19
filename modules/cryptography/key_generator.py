@@ -21,7 +21,7 @@ def generate_rsa_keys(key_size=2048):
     ).decode('utf-8')
     pub_pem = private_key.public_key().public_bytes(
         serialization.Encoding.PEM,
-        serialization.SubjectPublicKeyInfo
+        serialization.PublicFormat.SubjectPublicKeyInfo
     ).decode('utf-8')
     return {'private_key': priv_pem, 'public_key': pub_pem, 'key_size': key_size}
 
