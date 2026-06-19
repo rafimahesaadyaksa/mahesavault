@@ -1,6 +1,8 @@
 [README.md](https://github.com/user-attachments/files/28848621/README.md)
-![MahesaVault](https://readme-typing-svg.demolab.com?font=Fira+Code&duration=3000&pause=1000&color=00CDFF&width=600&lines=🔐+MahesaVault+-+The+Dual-Protocol+Secure+Vault.;Cryptography+And+Steganography+Tools+.)
-# 🔐 MahesaVault — The Dual-Protocol Secure Vault
+
+
+##![MahesaVault](https://readme-typing-svg.demolab.com?font=Fira+Code&duration=3000&pause=1000&color=00CDFF&width=600&lines=🔐+MahesaVault+-+The+Dual-Protocol+Secure+Vault.;Cryptography+And+Steganography+Tools+.)
+
 ## 📌 Deskripsi Proyek
 
 **MahesaVault** adalah platform keamanan data terpadu berbasis web yang menggabungkan dua protokol keamanan:
