@@ -1,11 +1,11 @@
 
 ![MahesaVault](https://readme-typing-svg.demolab.com?font=Fira+Code&size=26&duration=3000&pause=1000&color=00CDFF&width=850&lines=%F0%9F%94%92+MahesaVault+-+The+Dual-Protocol+Secure+Vault.;Cryptography+And+Steganography+Tools+.)
 
-## 📌 Deskripsi Proyek
-![MahesaVault](https://capsule-render.vercel.app/api?type=wave&color=00CDFF&text=MahesaVault&height=120&fontSize=35&animation=fadeIn)
-![MahesaVault](https://capsule-render.vercel.app/api?type=slice&color=00CDFF&text=MahesaVault&height=120&fontSize=35&animation=twinkling)
+
 ![MahesaVault](https://capsule-render.vercel.app/api?type=transparent&fontColor=00CDFF&text=🔐+MahesaVault&height=80&fontSize=40&animation=fadeIn)
 
+
+## 📌 Deskripsi Proyek
 [README.md](https://github.com/user-attachments/files/28848621/README.md)
 **MahesaVault** adalah platform keamanan data terpadu berbasis web yang menggabungkan dua protokol keamanan:
 
