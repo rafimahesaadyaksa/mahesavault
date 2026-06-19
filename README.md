@@ -62,10 +62,6 @@ en-de-vault-lite/
 ├── assets/                # Static assets (images, CSS)
 │   ├── sample_images/     # Sample cover images
 │   └── styles/            # Custom CSS
-├── files/                 # Documentation
-│   ├── ARCHITECTURE.md    # Detailed technical specification
-│   ├── DESIGN.md          # Design principles
-│   └── PROMPT.md          # Prompt engineering guidelines
 ├── modules/               # Core functionality
 │   ├── cryptography/      # Encryption/decryption algorithms
 │   │   ├── classical/     # Caesar, Vigenere, Playfair, Hill, Affine
