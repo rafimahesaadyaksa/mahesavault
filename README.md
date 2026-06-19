@@ -1,5 +1,5 @@
 [README.md](https://github.com/user-attachments/files/28848621/README.md)
-![MahesaVault — The Dual-Protocol Secure Vault](https://readme-typing-svg.demolab.com?font=Fira+Code&duration=3000&pause=1000&color=00CDFF&width=500&lines=🧠+Code+projects+you+can+showcase.;Let+Aptifolio+build+your+portfolio.)
+![MahesaVault](https://readme-typing-svg.demolab.com?font=Fira+Code&duration=3000&pause=1000&color=00CDFF&width=500&lines=🔐+MahesaVault+-+The+Dual-Protocol+Secure Vault.;Crypthography+And+Steganography+Tools+.)
 # 🔐 MahesaVault — The Dual-Protocol Secure Vault
 ## 📌 Deskripsi Proyek
 
