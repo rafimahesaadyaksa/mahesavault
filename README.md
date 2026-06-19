@@ -1,9 +1,6 @@
+![MahesaVault](https://capsule-render.vercel.app/api?type=transparent&fontColor=000000&text=MahesaVault&height=80&fontSize=40&animation=fadeIn)
 
 ![MahesaVault](https://readme-typing-svg.demolab.com?font=Fira+Code&size=26&duration=3000&pause=1000&color=00CDFF&width=850&lines=%F0%9F%94%92+MahesaVault+-+The+Dual-Protocol+Secure+Vault.;Cryptography+And+Steganography+Tools+.)
-
-##
-
-![MahesaVault](https://capsule-render.vercel.app/api?type=transparent&fontColor=000000&text=MahesaVault&height=80&fontSize=40&animation=fadeIn)
 
 
 ## 📌 Deskripsi Proyek
