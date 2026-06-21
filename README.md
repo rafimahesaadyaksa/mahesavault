@@ -133,7 +133,7 @@ streamlit run app.py
 ### requirements.txt
 ```
 streamlit>=1.32.0
-opencv-python>=4.9.0
+opencv-python>=4.9.0 --> jika lib ini tidak bisa di streamlit pakai opencv-python-headless>=4.9.0
 numpy>=1.26.0
 matplotlib>=3.8.0
 scikit-image>=0.22.0
