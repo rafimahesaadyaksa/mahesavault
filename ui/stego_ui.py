@@ -94,12 +94,12 @@ def render():
                     st.info("🎵 Audio file loaded successfully.")
             else:
                 cover_file = st.file_uploader(
-                    "Upload AVI video file", type=['avi'],
+                    "Upload Video file", type=['avi', 'mp4', 'mkv'],
                     key="stego_cover_video"
                 )
                 if cover_file:
                     st.video(cover_file)
-                    st.info("🎥 Video file loaded successfully.")
+                    st.info("🎥 Video file loaded successfully. Note: Output will be converted to .AVI to preserve LSB data losslessly.")
 
         with col_config:
             st.markdown("##### ⚙️ Configuration")
@@ -211,7 +211,8 @@ def render():
                                 )
                             else:
                                 # Video Steganography
-                                temp_in = tempfile.NamedTemporaryFile(delete=False, suffix=".avi")
+                                ext = os.path.splitext(cover_file.name)[1].lower()
+                                temp_in = tempfile.NamedTemporaryFile(delete=False, suffix=ext)
                                 temp_in.write(cover_file.getvalue())
                                 temp_in.close()
                                 
@@ -248,14 +249,15 @@ def render():
         st.markdown("##### 📥 Extract Hidden Message")
 
         stego_file = st.file_uploader(
-            "Upload stego media (PNG / WAV / AVI)", type=['png', 'wav', 'avi'],
+            "Upload stego media (PNG / WAV / AVI / MP4 / MKV)", type=['png', 'wav', 'avi', 'mp4', 'mkv'],
             key="stego_decode_file"
         )
 
         if stego_file:
-            if stego_file.name.lower().endswith('.wav'):
+            ext = stego_file.name.lower().split('.')[-1]
+            if ext == 'wav':
                 st.audio(stego_file)
-            elif stego_file.name.lower().endswith('.avi'):
+            elif ext in ['avi', 'mp4', 'mkv']:
                 st.video(stego_file)
             else:
                 stego_img = _load_image(stego_file)
@@ -299,11 +301,12 @@ def render():
                         if stego_file.name.lower().endswith('.wav'):
                             from modules.steganography.audio_stego import extract_audio
                             msg = extract_audio(stego_file.getvalue(), dec_key, dec_xor)
-                        elif stego_file.name.lower().endswith('.avi') or dec_method == "Video LSB (AVI)":
+                        elif stego_file.name.lower().endswith(('.avi', '.mp4', '.mkv')) or dec_method == "Video LSB (AVI)":
                             from modules.steganography.video_stego import extract_video
                             import tempfile
                             import os
-                            temp_in = tempfile.NamedTemporaryFile(delete=False, suffix=".avi")
+                            ext = os.path.splitext(stego_file.name)[1].lower()
+                            temp_in = tempfile.NamedTemporaryFile(delete=False, suffix=ext)
                             temp_in.write(stego_file.getvalue())
                             temp_in.close()
                             msg = extract_video(temp_in.name, dec_key, dec_xor)
@@ -489,79 +492,94 @@ def render():
     # ─── TAB 3: ANALYSIS ───
     with tab3:
         st.markdown("##### 📊 Steganalysis & Visual Forensics")
-
-        if 'original_img' not in st.session_state or 'stego_img' not in st.session_state:
-            st.warning("⚠️ Generate a stego image in the Encoder tab first to see analysis.")
-            return
-
-        original = st.session_state['original_img']
-        stego = st.session_state['stego_img']
-
-        # Side-by-side comparison
-        st.markdown("**Original vs Stego Image**")
-        c1, c2 = st.columns(2)
-        with c1:
-            _show_image(original, "Original")
-        with c2:
-            _show_image(stego, "Stego")
-
-        # Metrics
-        if 'stego_metrics' in st.session_state:
-            render_metrics_row(st.session_state['stego_metrics'])
-
-        st.markdown("---")
-
-        # RGB Histogram
-        st.markdown("**RGB Histogram Comparison**")
-        fig_hist = rgb_histogram_comparison(original, stego)
-        st.pyplot(fig_hist)
-        plt.close(fig_hist)
-
-        st.markdown("---")
-
-        # Bit-Plane Visualization
-        st.markdown("**Bit-Plane Visualization (Stego Image)**")
-        fig_bp = bit_plane_figure(stego)
-        st.pyplot(fig_bp)
-        plt.close(fig_bp)
-
-        st.markdown("---")
-
-        # Error Map
-        st.markdown("**Error Map — Pixel Modifications**")
-        fig_err = error_map_figure(original, stego)
-        st.pyplot(fig_err)
-        plt.close(fig_err)
-
-        st.markdown("---")
-
-        # Chi-Square Attack
-        st.markdown("**Chi-Square Steganalysis Attack**")
-        st.markdown("*A statistical attack to detect LSB steganography based on PoV frequency analysis.*")
-        fig_chi = chi_square_figure(stego)
-        st.pyplot(fig_chi)
-        plt.close(fig_chi)
-
-        st.markdown("---")
-
-        # AI-Powered Detector
-        st.markdown("**🤖 AI-Powered Steganalysis Detector**")
-        st.markdown("*Uses a heuristic ensemble (Chi-Square, Entropy, SPA, etc.) to detect hidden data with high accuracy.*")
         
-        if st.button("Run AI Detection on Stego Image"):
-            with st.spinner("Analyzing image features..."):
-                report = detect_steganography(stego)
+        analysis_mode = st.radio("Analysis Mode", ["Analyze Arbitrary Image", "Compare Generated Stego (Encoder)"], horizontal=True)
+        
+        target_img = None
+        original_img = None
+        
+        if analysis_mode == "Analyze Arbitrary Image":
+            st.info("Upload any PNG/JPG image to analyze it for hidden steganography.")
+            upload_target = st.file_uploader("Upload Image for Steganalysis", type=['png', 'jpg', 'jpeg'], key="steganalysis_upload")
+            if upload_target:
+                target_img = _load_image(upload_target)
+                _show_image(target_img, "Image to Analyze")
+        else:
+            if 'original_img' not in st.session_state or 'stego_img' not in st.session_state:
+                st.warning("⚠️ Generate a stego image in the Encoder tab first to see comparison analysis.")
+            else:
+                original_img = st.session_state['original_img']
+                target_img = st.session_state['stego_img']
                 
-                if report['is_stego']:
-                    st.error(f"🚨 **STEGANOGRAPHY DETECTED!** Confidence: {report['confidence']}%")
-                else:
-                    st.success(f"✅ **CLEAN IMAGE.** Confidence: {report['confidence']}%")
-                
-                # Show breakdown
-                with st.expander("View Detection Heuristics Breakdown"):
-                    for key, val in report['heuristics'].items():
-                        st.markdown(f"- **{key}**: {val}")
-                        
+                # Side-by-side comparison
+                st.markdown("**Original vs Stego Image**")
+                c1, c2 = st.columns(2)
+                with c1:
+                    _show_image(original_img, "Original")
+                with c2:
+                    _show_image(target_img, "Stego")
+        
+                # Metrics
+                if 'stego_metrics' in st.session_state:
+                    render_metrics_row(st.session_state['stego_metrics'])
+                    
+                st.markdown("---")
+        
+                # RGB Histogram
+                st.markdown("**RGB Histogram Comparison**")
+                fig_hist = rgb_histogram_comparison(original_img, target_img)
+                st.pyplot(fig_hist)
+                plt.close(fig_hist)
+        
+                st.markdown("---")
+        
+                # Error Map
+                st.markdown("**Error Map — Pixel Modifications**")
+                fig_err = error_map_figure(original_img, target_img)
+                st.pyplot(fig_err)
+                plt.close(fig_err)
+
+        if target_img is not None:
+            st.markdown("---")
+            st.markdown("### Single Image Analysis")
+
+            # AI-Powered Detector
+            st.markdown("**🤖 AI-Powered Steganalysis Detector**")
+            st.markdown("*Uses a heuristic ensemble (Chi-Square, Entropy, SPA, etc.) to detect hidden data with high accuracy.*")
+            
+            if st.button("Run AI Detection on Image", type="primary"):
+                with st.spinner("Analyzing image features..."):
+                    report = detect_steganography(target_img)
+                    
+                    if report['prediction'] == "STEGO":
+                        st.error(f"🚨 **STEGANOGRAPHY DETECTED!** Confidence: {report['confidence']:.1f}%")
+                    elif report['prediction'] == "SUSPICIOUS":
+                        st.warning(f"⚠️ **SUSPICIOUS IMAGE.** Confidence: {report['confidence']:.1f}%")
+                    else:
+                        st.success(f"✅ **CLEAN IMAGE.** Confidence: {report['confidence']:.1f}%")
+                    
+                    # Show breakdown
+                    with st.expander("View Detection Heuristics Breakdown"):
+                        for key, val in report['indicators'].items():
+                            st.markdown(f"- **{key}**: {val['detail']} (Score: {val['score']:.2f})")
+                            
+            st.markdown("---")
+
+            # Bit-Plane Visualization
+            st.markdown("**Bit-Plane Visualization**")
+            fig_bp = bit_plane_figure(target_img)
+            st.pyplot(fig_bp)
+            plt.close(fig_bp)
+    
+            st.markdown("---")
+    
+            # Chi-Square Attack
+            st.markdown("**Chi-Square Steganalysis Attack**")
+            st.markdown("*A statistical attack to detect LSB steganography based on PoV frequency analysis.*")
+            fig_chi = chi_square_figure(target_img)
+            st.pyplot(fig_chi)
+            plt.close(fig_chi)
+
         st.markdown("---")
 
         # Comparison table

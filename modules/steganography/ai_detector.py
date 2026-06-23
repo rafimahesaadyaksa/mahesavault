@@ -15,7 +15,7 @@ def extract_features(image: np.ndarray) -> np.ndarray:
     """
     Extract statistical features from an image for steganalysis.
     
-    Features extracted (12 total):
+    Features extracted (16 total):
     1-3: Mean of LSB plane per channel (R, G, B)
     4-6: Variance of LSB plane per channel
     7:   Chi-square statistic on grayscale histogram
@@ -24,12 +24,16 @@ def extract_features(image: np.ndarray) -> np.ndarray:
     10:  Sample Pairs Analysis (SPA) metric
     11:  RS Analysis metric (Regular-Singular groups ratio)
     12:  Histogram centroid displacement
+    13:  Top 5% LSB Entropy (for localized sequential payload detection)
+    14:  Rest 95% LSB Entropy
+    15:  Top 5% Transition Rate
+    16:  Rest 95% Transition Rate
     
     Args:
         image: BGR image as numpy array.
         
     Returns:
-        Feature vector of 12 values.
+        Feature vector of 16 values.
     """
     if len(image.shape) == 2:
         image = cv2.cvtColor(image, cv2.COLOR_GRAY2BGR)
@@ -117,6 +121,29 @@ def extract_features(image: np.ndarray) -> np.ndarray:
     centroid = np.sum(np.arange(256) * hist) / max(np.sum(hist), 1)
     features.append(centroid / 256.0)  # Normalize
     
+    # === Features 13-16: Localized Anomaly Detection (Sequential LSB) ===
+    # For small payloads, global stats are unaffected. We compare top 5% with the rest.
+    split_idx = int(len(lsb_flat) * 0.05)
+    if split_idx > 100:
+        top_lsb = lsb_flat[:split_idx]
+        rest_lsb = lsb_flat[split_idx:]
+        
+        # Entropy
+        for chunk in [top_lsb, rest_lsb]:
+            p1 = np.mean(chunk)
+            p0 = 1.0 - p1
+            chunk_ent = -(p0 * np.log2(p0) + p1 * np.log2(p1)) if (p0 > 0 and p1 > 0) else 0.0
+            features.append(chunk_ent)
+            
+        # Transition Rate
+        for chunk in [top_lsb, rest_lsb]:
+            trans = np.sum(np.abs(np.diff(chunk.astype(np.int16))))
+            rate = trans / max(len(chunk) - 1, 1)
+            features.append(rate)
+    else:
+        # Image too small for localized detection
+        features.extend([features[7], features[7], features[8], features[8]])
+        
     return np.array(features)
 
 
@@ -177,7 +204,8 @@ def detect_steganography(image: np.ndarray) -> dict:
     # === Indicator 3: LSB Entropy ===
     entropy = features[7]
     # Stego makes LSB entropy closer to 1.0 (maximum randomness)
-    entropy_score = entropy  # Already 0-1
+    # Clean images usually have entropy around 0.85-0.95.
+    entropy_score = max(0, min(1.0, (entropy - 0.90) * 10))  # 0.90->0, 1.0->1.0
     indicators['lsb_entropy'] = {
         'score': entropy_score,
         'detail': f"LSB entropy: {entropy:.4f} (1.0 = max randomness)"
@@ -186,9 +214,8 @@ def detect_steganography(image: np.ndarray) -> dict:
     
     # === Indicator 4: Transition Rate ===
     transition_rate = features[8]
-    # Clean images: transition rate < 0.5, Stego: closer to 0.5
-    trans_score = transition_rate * 2  # Scale to 0-1
-    trans_score = min(trans_score, 1.0)
+    # Clean images: transition rate ~0.2-0.3, Stego: closer to 0.5
+    trans_score = max(0, min(1.0, (transition_rate - 0.3) * 5))  # 0.3->0, 0.5->1.0
     indicators['transition_rate'] = {
         'score': trans_score,
         'detail': f"Transition rate: {transition_rate:.4f} (0.5 = max, suspicious)"
@@ -214,18 +241,42 @@ def detect_steganography(image: np.ndarray) -> dict:
     }
     scores.append(spa_score * 0.10)
     
+    # === Indicator 7: Localized Anomaly (Sequential LSB) ===
+    # Compare top 5% vs rest 95%
+    top_entropy, rest_entropy = features[12], features[13]
+    top_trans, rest_trans = features[14], features[15]
+    
+    # If the top part is highly random and the rest is not, it's a huge red flag
+    ent_diff = max(0, top_entropy - rest_entropy)
+    trans_diff = max(0, top_trans - rest_trans)
+    
+    anomaly_score = 0.0
+    if top_entropy > 0.98 and ent_diff > 0.02:
+        anomaly_score += min(1.0, ent_diff * 10)
+    if top_trans > 0.45 and trans_diff > 0.05:
+        anomaly_score += min(1.0, trans_diff * 5)
+        
+    anomaly_score = min(1.0, anomaly_score)
+    indicators['local_anomaly'] = {
+        'score': anomaly_score,
+        'detail': f"Top 5% Entropy Diff: +{ent_diff:.4f}, Trans Diff: +{trans_diff:.4f} (Sequential LSB check)"
+    }
+    # We give this a heavy weight because it's a direct signature of sequential payload
+    scores.append(anomaly_score * 0.40)
+    
     # === Final Confidence ===
-    raw_confidence = sum(scores) / sum([0.15, 0.25, 0.15, 0.15, 0.20, 0.10])
+    # Total weights: 0.15 + 0.25 + 0.15 + 0.15 + 0.20 + 0.10 + 0.40 = 1.40
+    raw_confidence = sum(scores) / 1.40
     confidence = min(raw_confidence * 100, 99.9)
     
     # Determine risk level
-    if confidence >= 75:
+    if confidence >= 70:
         risk_level = "CRITICAL"
         prediction = "STEGO"
-    elif confidence >= 55:
+    elif confidence >= 50:
         risk_level = "HIGH"
         prediction = "STEGO"
-    elif confidence >= 40:
+    elif confidence >= 35:
         risk_level = "MEDIUM"
         prediction = "SUSPICIOUS"
     else:

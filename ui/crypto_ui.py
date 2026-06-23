@@ -325,3 +325,63 @@ def render():
                         """, unsafe_allow_html=True)
                     except Exception as e:
                         st.error(f"Error: {e}")
+
+    # ─── TAB 6: ADVANCED CRYPTO ───
+    with tab6:
+        st.markdown("##### 🌌 Advanced Cryptography (Post-Quantum & Homomorphic)")
+        st.markdown("Try next-generation cryptographic algorithms like Learning With Errors (LWE) and Paillier.")
+        
+        adv_algo = st.selectbox("Select Advanced Algorithm", ["LWE (Post-Quantum)", "Paillier (Homomorphic)"])
+        
+        if adv_algo == "LWE (Post-Quantum)":
+            st.info("LWE (Learning With Errors) is a lattice-based cipher resistant to quantum computer attacks.")
+            
+            if st.button("Generate LWE Keys", key="lwe_gen"):
+                st.session_state['lwe_keys'] = lwe_gen()
+                st.success("LWE Keys Generated!")
+                
+            if 'lwe_keys' in st.session_state:
+                st.success("LWE Keys are loaded in memory.")
+                
+                lwe_msg = st.text_input("Message to Encrypt", "Hello Quantum World!")
+                if st.button("Encrypt & Decrypt LWE"):
+                    with st.spinner("Encrypting..."):
+                        c = lwe_enc(lwe_msg, st.session_state['lwe_keys']['public_key'], st.session_state['lwe_keys']['params'])
+                        st.code("Ciphertext Sample (first char, 8 bits):\n" + str(c[:8]))
+                    
+                    with st.spinner("Decrypting..."):
+                        d = lwe_dec(c, st.session_state['lwe_keys']['private_key'], st.session_state['lwe_keys']['params'])
+                        st.success(f"Decrypted: {d}")
+                        
+        elif adv_algo == "Paillier (Homomorphic)":
+            st.info("Paillier is a homomorphic encryption scheme. You can perform addition on encrypted numbers without decrypting them first!")
+            
+            if st.button("Generate Paillier Keys", key="paillier_gen"):
+                st.session_state['paillier_keys'] = paillier_gen(bits=256)
+                st.success("Paillier Keys Generated!")
+                
+            if 'paillier_keys' in st.session_state:
+                st.success("Paillier Keys are loaded in memory.")
+                
+                col1, col2 = st.columns(2)
+                with col1:
+                    num1 = st.number_input("Number A", value=15)
+                with col2:
+                    num2 = st.number_input("Number B", value=25)
+                    
+                if st.button("Demonstrate Homomorphic Addition"):
+                    keys = st.session_state['paillier_keys']
+                    pub, priv, nsq = keys['public_key'], keys['private_key'], keys['n_squared']
+                    
+                    with st.spinner("Encrypting numbers..."):
+                        c1 = paillier_enc(int(num1), pub, nsq)
+                        c2 = paillier_enc(int(num2), pub, nsq)
+                        st.code(f"Encrypted A: {str(c1)[:30]}...\nEncrypted B: {str(c2)[:30]}...")
+                        
+                    with st.spinner("Adding encrypted numbers..."):
+                        c_sum = paillier_add(c1, c2, nsq)
+                        st.code(f"Encrypted Sum: {str(c_sum)[:30]}...")
+                        
+                    with st.spinner("Decrypting result..."):
+                        result = paillier_dec(c_sum, priv, pub, nsq)
+                        st.success(f"Decrypted Sum: {result} (Expected: {num1 + num2})")
